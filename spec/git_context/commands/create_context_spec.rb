@@ -3,7 +3,7 @@ require 'spec_helper'
 
 RSpec.describe GitContext::Commands::CreateContext do
   let(:configuration) { instance_double(GitContext::Configuration) }
-  let(:interaction) { double('Interaction') }
+  let(:interaction) { instance_double(GitContext::Interaction) }
   let(:user) { GitContext::User.new(name: 'john', email: 'john@email.com') }
   let(:profile_names) { %w[work personal] }
   let(:profile_1) { GitContext::Profile.new('work', user) }

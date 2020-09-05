@@ -5,9 +5,9 @@ module GitContext
       def call
         profile_names = @configuration.list_profile_names
         work_dir = @interaction.prompt_work_dir
-        profile = @interaction.prompt_profile(profile_names)
+        profile_name = @interaction.prompt_profile(profile_names)
 
-        context = Context.new(work_dir, profile)
+        context = Context.new(work_dir, profile_name)
 
         @configuration.add_context(context)
       end

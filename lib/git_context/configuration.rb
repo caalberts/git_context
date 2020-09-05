@@ -19,7 +19,7 @@ module GitContext
     end
 
     def add_profile(profile)
-      profile_file = profile_filepath(profile)
+      profile_file = profile_filepath(profile.profile_name)
       touch_file(profile_file)
 
       `git config -f "#{profile_file}" --add user.name "#{profile.user.name}"`
@@ -31,20 +31,20 @@ module GitContext
     end
 
     def delete_profile(profile)
-      profile_file = profile_filepath(profile)
+      profile_file = profile_filepath(profile.profile_name)
       delete_file(profile_file)
     end
 
     def add_context(context)
-      profile_file = profile_filepath(context.profile)
+      profile_file = profile_filepath(context.profile_name)
 
       `git config -f "#{contexts_filepath}" --add "includeIf.gitdir:#{context.work_dir}/.path" "#{profile_file}"`
     end
 
     private
 
-    def profile_filepath(profile)
-      profiles_dir.join(profile.profile_name)
+    def profile_filepath(profile_name)
+      profiles_dir.join(profile_name)
     end
 
     def create_base_dir

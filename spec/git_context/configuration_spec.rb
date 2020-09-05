@@ -142,7 +142,7 @@ RSpec.describe GitContext::Configuration do
   end
 
   describe '#add_context' do
-    let(:context) { GitContext::Context.new('/my/work/dir', profile) }
+    let(:context) { GitContext::Context.new('/my/work/dir', 'test_profile') }
 
     before do
       subject.setup

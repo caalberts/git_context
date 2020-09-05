@@ -3,7 +3,7 @@ require 'spec_helper'
 
 RSpec.describe GitContext::Commands::CreateProfile do
   let(:configuration) { instance_double(GitContext::Configuration) }
-  let(:interaction) { double('Interaction') }
+  let(:interaction) { instance_double(GitContext::Interaction) }
   let(:profile_name) { 'my-work-profile' }
   let(:user) { GitContext::User.new(name: 'john', email: 'john@email.com') }
 
@@ -11,14 +11,16 @@ RSpec.describe GitContext::Commands::CreateProfile do
 
   before do
     allow(interaction).to receive(:prompt_profile_name).and_return(profile_name)
-    allow(interaction).to receive(:prompt_user_info).and_return(user)
+    allow(interaction).to receive(:prompt_user_name).and_return(user.name)
+    allow(interaction).to receive(:prompt_user_email).and_return(user.email)
     allow(configuration).to receive(:add_profile)
   end
 
   describe '#call' do
     it 'asks user for user name and email' do
       expect(interaction).to receive(:prompt_profile_name)
-      expect(interaction).to receive(:prompt_user_info)
+      expect(interaction).to receive(:prompt_user_name)
+      expect(interaction).to receive(:prompt_user_email)
 
       subject.call
     end
