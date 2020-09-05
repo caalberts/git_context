@@ -1,28 +1,73 @@
-# GitContext
+# git-context
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/git_context`. To experiment with that code, run `bin/console` for an interactive prompt.
+`git-context` provides a tool to manage conditional git config.
 
-TODO: Delete this and the text above, and describe your gem
+No more committing with the wrong email in a new repository. With `git-context` you can set up a context per directory. Any git repositories within the directory would use the git config specified for that directory.
+
+Currently, the supported config values are:
+- `user.name`
+- `user.email`
+
+`git-context` uses git config [conditional includes](https://git-scm.com/docs/git-config#_conditional_includes) under the hood.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Install the `git-context` CLI via `gem install`.
 
-```ruby
-gem 'git_context'
-```
-
-And then execute:
-
-    $ bundle install
-
-Or install it yourself as:
-
+```shell
     $ gem install git_context
-
+```
 ## Usage
 
-TODO: Write usage instructions here
+First, set up `git-context` to hook into the user's `~/.git/config`.
+
+```shell
+    $ git-context setup
+```
+
+Next, create one or more user profile to contain the user name and email address.
+
+```shell
+    $ git-context create_profile
+    Please enter profile name: work
+    Please enter the name to be used in git config: John Doe
+    Please enter the email address to be used in git config: johndoe@company.com
+
+    $ git-context create_profile
+    Please enter profile name: fun
+    Please enter the name to be used in git config: Johnny
+    Please enter the email address to be used in git config: johnny@wut.lol
+```
+
+Finally, create contexts to use a specified profile in a directory.
+
+```shell
+    $ git-context create_context
+    Please enter working directory: /Users/john/work
+    Please select from existing profiles: work
+    
+    $ git-context create_context
+    Please enter working directory: /Users/john/fun
+    Please select from existing profiles: fun
+```
+
+Now you can commit as different users easily.
+
+```shell
+    $ cd /Users/john/work/project/unicorn
+    $ git config user.name
+    John Doe
+    $ git config user.email
+    johndoe@company.com
+    
+    $ cd /Users/john/fun/lol/wut
+    $ git config user.name
+    Johnny
+    $ git config user.email
+    johnny@wut.lol
+```
+
+**Tip:** You could also use `git context`. `git` recognizes `git-context` as a custom command. 
 
 ## Development
 
@@ -32,7 +77,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/git_context.
+Bug reports and pull requests are welcome on GitHub at https://github.com/caalberts/git_context.
 
 
 ## License

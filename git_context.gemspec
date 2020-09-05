@@ -6,13 +6,11 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Albert Salim"]
   spec.email         = ["albertlimca@gmail.com"]
 
-  spec.summary       = %q{Manage directory specific git configs easily}
-  spec.description   = %q{Manage directory specific git configs easily}
+  spec.summary       = %q{`git-context` provides a tool to manage conditional git config.}
+  spec.description   = %q{`git-context` provides a tool to manage conditional git config.}
   spec.homepage      = "https://github.com/caalberts/git_context"
   spec.license       = "MIT"
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
-
-  spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/caalberts/git_context"
