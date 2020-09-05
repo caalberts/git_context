@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GitContext
   class CLI
     COMMAND_CLASSES = {

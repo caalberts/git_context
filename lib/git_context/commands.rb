@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'git_context/commands/base'
 require 'git_context/commands/create_context'
 require 'git_context/commands/create_profile'

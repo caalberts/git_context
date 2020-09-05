@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GitContext
   module Commands
     class CreateContext < Base

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module GitContext
   module Commands
     class CreateProfile < Base
@@ -14,4 +15,3 @@ module GitContext
     end
   end
 end
-

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'tmpdir'
 
@@ -78,7 +80,7 @@ RSpec.describe GitContext::Configuration do
         subject.setup
 
         gitconfig = File.read(gitconfig_path)
-        expect(gitconfig.scan(/gitcontext\/contexts/).count).to eq(1)
+        expect(gitconfig.scan(%r{gitcontext/contexts}).count).to eq(1)
       end
     end
   end
@@ -152,7 +154,7 @@ RSpec.describe GitContext::Configuration do
       subject.add_context(context)
 
       content = File.read("#{home}/.gitcontext/contexts")
-      expect(content).to include(%Q([includeIf "gitdir:/my/work/dir/"]\n\tpath = #{home}/.gitcontext/profiles/test_profile))
+      expect(content).to include(%([includeIf "gitdir:/my/work/dir/"]\n\tpath = #{home}/.gitcontext/profiles/test_profile))
     end
   end
 end
