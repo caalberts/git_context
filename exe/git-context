@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+require 'git_context'
+
+configuration = GitContext::Configuration.new(Dir.home)
+command = ARGV.shift
+GitContext::CLI.new(configuration).exec(command)

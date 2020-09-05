@@ -1,3 +1,4 @@
+require 'git_context/cli'
 require 'git_context/commands'
 require 'git_context/configuration'
 require 'git_context/interaction'
