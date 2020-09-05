@@ -7,7 +7,7 @@ module GitContext
     PROFILES_DIR = 'profiles'
     CONTEXTS_FILENAME = 'contexts'
 
-    def initialize(home_dir = Dir.home)
+    def initialize(home_dir)
       @home_dir = home_dir
     end
 
