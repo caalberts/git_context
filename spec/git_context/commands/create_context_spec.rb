@@ -21,8 +21,8 @@ RSpec.describe GitContext::Commands::CreateContext do
   end
 
   describe '#call' do
-    it 'asks user for working directory to set context' do
-      expect(interaction).to receive(:prompt_work_dir)
+    it 'asks user for working directory to set context, defaulting to current work dir' do
+      expect(interaction).to receive(:prompt_work_dir).with(Dir.pwd)
 
       subject.call
     end

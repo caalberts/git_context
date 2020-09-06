@@ -8,8 +8,8 @@ module GitContext
       @prompt = prompt
     end
 
-    def prompt_work_dir
-      @prompt.ask('Please enter working directory:')
+    def prompt_work_dir(default_dir)
+      @prompt.ask('Please enter working directory:', default: default_dir)
     end
 
     def prompt_profile(saved_profiles)

@@ -9,11 +9,12 @@ RSpec.describe GitContext::Interaction do
 
   describe '#prompt_work_dir' do
     it 'asks user for work directory' do
+      default_dir = '/work/dir'
       expect(prompt).to receive(:ask)
-        .with('Please enter working directory:')
+        .with('Please enter working directory:', default: default_dir)
         .and_return('/work/projects')
 
-      input = subject.prompt_work_dir
+      input = subject.prompt_work_dir(default_dir)
       expect(input).to eq('/work/projects')
     end
   end
