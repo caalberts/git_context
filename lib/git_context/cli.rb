@@ -3,6 +3,7 @@
 module GitContext
   class CLI
     COMMAND_CLASSES = {
+      help: 'Help',
       setup: 'Setup',
       create_profile: 'CreateProfile',
       create_context: 'CreateContext'
@@ -14,6 +15,7 @@ module GitContext
     end
 
     def exec(command_name)
+      command_name ||= 'help'
       command_class = command_for(command_name)
       command = command_class.new(interaction: @interaction, configuration: @configuration)
       command.call

@@ -22,6 +22,17 @@ RSpec.describe GitContext::CLI do
       end
     end
 
+    context 'without any command' do
+      let(:dummy_command) { instance_double(GitContext::Commands::Help, call: nil) }
+
+      it 'defaults to help' do
+        allow(GitContext::Commands::Help).to receive(:new).and_return(dummy_command)
+        expect(dummy_command).to receive(:call)
+
+        subject.exec(nil)
+      end
+    end
+
     context 'with unknown command' do
       it 'warns user' do
         expect { subject.exec('foo') }.to output(/Unknown command foo/).to_stderr
