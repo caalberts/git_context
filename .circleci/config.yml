@@ -8,9 +8,14 @@ jobs:
       ruby-version:
         type: string
         default: "latest"
+      codecov:
+        type: boolean
+        default: false
     docker:
       - image: "cimg/ruby:<< parameters.ruby-version >>"
     executor: ruby/default
+    environment:
+      CODECOV: << parameters.codecov >>
     steps:
       - checkout
       - ruby/install-deps:
@@ -32,6 +37,7 @@ workflows:
       - rspec:
           name: "rspec-ruby:2.7"
           ruby-version: "2.7"
+          codecov: true
       - rspec:
           name: "rspec-ruby:2.6"
           ruby-version: "2.6"

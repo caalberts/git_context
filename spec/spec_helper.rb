@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require './spec/coverage_env'
+
 require 'bundler/setup'
 require 'git_context'
 

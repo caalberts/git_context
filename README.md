@@ -1,6 +1,7 @@
 # git-context
 
 [![CircleCI Status](https://circleci.com/gh/caalberts/git_context/tree/master.svg?style=svg)](https://circleci.com/gh/caalberts/git_context/tree/master)
+[![codecov](https://codecov.io/gh/caalberts/git_context/branch/master/graph/badge.svg)](https://codecov.io/gh/caalberts/git_context)
 
 `git-context` provides a tool to manage conditional git config.
 
