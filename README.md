@@ -1,5 +1,7 @@
 # git-context
 
+[![CircleCI Status](https://circleci.com/gh/caalberts/git_context/tree/master.svg?style=svg)](https://circleci.com/gh/caalberts/git_context/tree/master)
+
 `git-context` provides a tool to manage conditional git config.
 
 No more committing with the wrong email in a new repository. With `git-context` you can set up a context per directory. Any git repositories within the directory would use the git config specified for that directory.
