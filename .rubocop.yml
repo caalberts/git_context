@@ -10,6 +10,7 @@ Style/Documentation:
 Style/FrozenStringLiteralComment:
   Exclude:
     - 'Gemfile'
+    - 'Guardfile'
     - 'Rakefile'
     - 'bin/console'
     - 'exe/git-context'
