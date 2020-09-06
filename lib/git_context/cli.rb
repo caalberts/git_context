@@ -19,6 +19,8 @@ module GitContext
       command.call
     rescue KeyError
       warn "Unknown command #{command_name}. Supported commands are #{COMMAND_CLASSES.keys.map(&:to_s)}"
+    rescue TTY::Reader::InputInterrupt
+      warn "\nInterrupted"
     end
 
     private
