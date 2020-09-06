@@ -1,0 +1,41 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@1.1.1
+
+jobs:
+  rspec:
+    parameters:
+      ruby-version:
+        type: string
+        default: "latest"
+    docker:
+      - image: "cimg/ruby:<< parameters.ruby-version >>"
+    executor: ruby/default
+    steps:
+      - checkout
+      - ruby/install-deps:
+          bundler-version: 2.1.4
+      - ruby/rspec-test
+  rubocop:
+    docker:
+      - image: cimg/ruby:2.6
+    executor: ruby/default
+    steps:
+      - checkout
+      - ruby/install-deps:
+          bundler-version: 2.1.4
+      - ruby/rubocop-check
+
+workflows:
+  build:
+    jobs:
+      - rspec:
+          name: "rspec-ruby:2.7"
+          ruby-version: "2.7"
+      - rspec:
+          name: "rspec-ruby:2.6"
+          ruby-version: "2.6"
+      - rspec:
+          name: "rspec-ruby:2.5"
+          ruby-version: "2.5"
+      - rubocop
