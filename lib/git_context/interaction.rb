@@ -4,8 +4,9 @@ require 'tty-prompt'
 
 module GitContext
   class Interaction
-    def initialize(prompt = TTY::Prompt.new)
+    def initialize(prompt = TTY::Prompt.new, pastel = Pastel.new)
       @prompt = prompt
+      @pastel = pastel
     end
 
     def prompt_work_dir(default_dir)
@@ -26,6 +27,10 @@ module GitContext
 
     def prompt_user_email
       @prompt.ask('Please enter the email address to be used in git config:')
+    end
+
+    def info(message)
+      puts @pastel.green(message)
     end
   end
 end

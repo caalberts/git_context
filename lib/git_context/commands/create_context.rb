@@ -11,6 +11,7 @@ module GitContext
         context = Context.new(work_dir, profile_name)
 
         @configuration.add_context(context)
+        @interaction.info("Context created to use #{profile_name} within #{work_dir}.")
       end
     end
   end

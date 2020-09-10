@@ -11,6 +11,8 @@ module GitContext
         user = User.new(user_name, user_email)
         profile = Profile.new(profile_name, user)
         @configuration.add_profile(profile)
+
+        @interaction.info("Profile #{profile_name} created.")
       end
     end
   end

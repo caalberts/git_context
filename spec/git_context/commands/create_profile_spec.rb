@@ -14,6 +14,7 @@ RSpec.describe GitContext::Commands::CreateProfile do
     allow(interaction).to receive(:prompt_profile_name).and_return(profile_name)
     allow(interaction).to receive(:prompt_user_name).and_return(user.name)
     allow(interaction).to receive(:prompt_user_email).and_return(user.email)
+    allow(interaction).to receive(:info)
     allow(configuration).to receive(:add_profile)
   end
 
@@ -29,6 +30,12 @@ RSpec.describe GitContext::Commands::CreateProfile do
     it 'adds profile with given user and email to configuration' do
       expected_profile = GitContext::Profile.new(profile_name, user)
       expect(configuration).to receive(:add_profile).with(expected_profile)
+
+      subject.call
+    end
+
+    it 'informs user when profile is created' do
+      expect(interaction).to receive(:info).with(/Profile #{profile_name} created/)
 
       subject.call
     end

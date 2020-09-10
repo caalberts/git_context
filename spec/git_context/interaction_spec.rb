@@ -63,4 +63,12 @@ RSpec.describe GitContext::Interaction do
       expect(input).to eq('john@email.com')
     end
   end
+
+  describe '#info' do
+    it 'prints message' do
+      message = 'success'
+
+      expect { subject.info(message) }.to output(/#{message}/).to_stdout
+    end
+  end
 end

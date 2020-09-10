@@ -16,6 +16,7 @@ RSpec.describe GitContext::Commands::CreateContext do
   before do
     allow(interaction).to receive(:prompt_work_dir).and_return(work_dir)
     allow(interaction).to receive(:prompt_profile).and_return(profile_1)
+    allow(interaction).to receive(:info).and_return(profile_1)
     allow(configuration).to receive(:list_profile_names).and_return(profile_names)
     allow(configuration).to receive(:add_context)
   end
@@ -42,6 +43,12 @@ RSpec.describe GitContext::Commands::CreateContext do
     it 'adds context with given work_dir and profile to configuration' do
       expected_context = GitContext::Context.new(work_dir, profile_1)
       expect(configuration).to receive(:add_context).with(expected_context)
+
+      subject.call
+    end
+
+    it 'informs user when context is created' do
+      expect(interaction).to receive(:info).with(/#{profile_1.profile_name}.+#{work_dir}/)
 
       subject.call
     end

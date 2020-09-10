@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     git_context (0.1.0)
+      pastel (~> 0.8)
       tty-prompt (~> 0.22)
 
 GEM
