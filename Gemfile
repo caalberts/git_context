@@ -6,6 +6,7 @@ gemspec
 group :development do
   gem 'guard'
   gem 'guard-rspec', require: false
+  gem 'lefthook'
   gem 'rubocop', require: false
 end
 
