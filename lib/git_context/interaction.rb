@@ -4,9 +4,8 @@ require 'tty-prompt'
 
 module GitContext
   class Interaction
-    def initialize(prompt = TTY::Prompt.new, pastel = Pastel.new)
+    def initialize(prompt = TTY::Prompt.new)
       @prompt = prompt
-      @pastel = pastel
     end
 
     def prompt_work_dir(default_dir)
@@ -34,7 +33,7 @@ module GitContext
     end
 
     def info(message)
-      puts @pastel.green(message)
+      @prompt.ok(message)
     end
   end
 end

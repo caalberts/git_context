@@ -24,6 +24,5 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.add_runtime_dependency 'pastel', '~> 0.8'
   spec.add_runtime_dependency 'tty-prompt', '~> 0.22'
 end

@@ -78,8 +78,9 @@ RSpec.describe GitContext::Interaction do
   describe '#info' do
     it 'prints message' do
       message = 'success'
+      expect(prompt).to receive(:ok).with(message)
 
-      expect { subject.info(message) }.to output(/#{message}/).to_stdout
+      subject.info(message)
     end
   end
 end
