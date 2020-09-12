@@ -12,9 +12,7 @@ RSpec.describe GitContext::Commands::CreateProfile do
 
   before do
     allow(interaction).to receive(:prompt_profile_name).and_return(profile_name)
-    allow(interaction).to receive(:prompt_user_name).and_return(user.name)
-    allow(interaction).to receive(:prompt_user_email).and_return(user.email)
-    allow(interaction).to receive(:prompt_user_signing_key).and_return(user.signing_key)
+    allow(interaction).to receive(:prompt_user_info).and_return(user.to_h)
     allow(interaction).to receive(:info)
     allow(configuration).to receive(:add_profile)
   end
@@ -22,9 +20,7 @@ RSpec.describe GitContext::Commands::CreateProfile do
   describe '#call' do
     it 'asks user for user name, email and signing key' do
       expect(interaction).to receive(:prompt_profile_name)
-      expect(interaction).to receive(:prompt_user_name)
-      expect(interaction).to receive(:prompt_user_email)
-      expect(interaction).to receive(:prompt_user_signing_key)
+      expect(interaction).to receive(:prompt_user_info)
 
       subject.call
     end

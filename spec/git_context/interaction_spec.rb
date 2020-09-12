@@ -1,77 +1,63 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'tty/prompt/test'
 
 RSpec.describe GitContext::Interaction do
-  let(:prompt) { instance_double(TTY::Prompt) }
+  let(:prompt) { TTY::Prompt::Test.new }
 
   subject { described_class.new(prompt) }
 
   describe '#prompt_work_dir' do
+    let(:default_dir) { '/default/dir' }
+
     it 'asks user for work directory' do
-      default_dir = '/work/dir'
-      expect(prompt).to receive(:ask)
-        .with('Please enter working directory:', default: default_dir)
-        .and_return('/work/projects')
+      simulate_prompt_input("/project\n")
 
       input = subject.prompt_work_dir(default_dir)
-      expect(input).to eq('/work/projects')
+      expect(input).to eq('/project')
+    end
+
+    context 'when user chooses default' do
+      it 'returns default value' do
+        simulate_prompt_input("\n")
+
+        input = subject.prompt_work_dir(default_dir)
+        expect(input).to eq(default_dir)
+      end
     end
   end
 
   describe '#prompt_profile' do
     it 'asks user to select a saved profile' do
-      saved_profiles = %w[personal work]
-      expect(prompt).to receive(:select)
-        .with('Please select from existing profiles:', saved_profiles)
-        .and_return('personal')
+      simulate_prompt_keydown(2)
 
-      input = subject.prompt_profile(saved_profiles)
-      expect(input).to eq('personal')
+      input = subject.prompt_profile(%w[personal work others])
+      expect(input).to eq('others')
     end
   end
 
   describe '#prompt_profile_name' do
     it 'asks user for a profile name' do
-      expect(prompt).to receive(:ask)
-        .with('Please enter profile name:')
-        .and_return('personal')
+      simulate_prompt_input("personal\n")
 
       input = subject.prompt_profile_name
       expect(input).to eq('personal')
     end
   end
 
-  describe '#prompt_user_name' do
-    it 'asks user for name' do
-      expect(prompt).to receive(:ask)
-        .with('Please enter the name to be used in git config:')
-        .and_return('John Doe')
+  describe '#prompt_user_info' do
+    it 'asks for user name, email address and signing key' do
+      name = 'John Doe'
+      email = ' john@email.com'
+      signing_key = 'ABCD1234'
 
-      input = subject.prompt_user_name
-      expect(input).to eq('John Doe')
-    end
-  end
+      simulate_prompt_input([name, email, signing_key].join("\n"))
 
-  describe '#prompt_user_email' do
-    it 'asks user for email address' do
-      expect(prompt).to receive(:ask)
-        .with('Please enter the email address to be used in git config:')
-        .and_return('john@email.com')
-
-      input = subject.prompt_user_email
-      expect(input).to eq('john@email.com')
-    end
-  end
-
-  describe '#prompt_user_signing_key' do
-    it 'asks user for signing key' do
-      expect(prompt).to receive(:ask)
-        .with('Please enter the signing key to be used in git config:')
-        .and_return('ABCD1234')
-
-      input = subject.prompt_user_signing_key
-      expect(input).to eq('ABCD1234')
+      input = subject.prompt_user_info
+      expect(input[:name]).to eq(name)
+      expect(input[:email]).to eq(email)
+      expect(input[:signing_key]).to eq(signing_key)
     end
   end
 
@@ -82,5 +68,19 @@ RSpec.describe GitContext::Interaction do
 
       subject.info(message)
     end
+  end
+
+  def simulate_prompt_keydown(count)
+    prompt.on(:keypress) do |event|
+      prompt.trigger(:keydown) if event.value == 'j'
+    end
+
+    prompt.input << "#{'j' * count}\n"
+    prompt.input.rewind
+  end
+
+  def simulate_prompt_input(input)
+    prompt.input << input
+    prompt.input.rewind
   end
 end

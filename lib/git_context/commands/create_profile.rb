@@ -5,11 +5,9 @@ module GitContext
     class CreateProfile < Base
       def call
         profile_name = @interaction.prompt_profile_name
-        user_name = @interaction.prompt_user_name
-        user_email = @interaction.prompt_user_email
-        user_signing_key = @interaction.prompt_user_signing_key
+        input = @interaction.prompt_user_info
 
-        user = User.new(user_name, user_email, user_signing_key)
+        user = User.new(input[:name], input[:email], input[:signing_key])
         profile = Profile.new(profile_name, user)
         @configuration.add_profile(profile)
 
