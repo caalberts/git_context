@@ -35,11 +35,13 @@ Next, create one or more user profile to contain the user name and email address
     Please enter profile name: work
     Please enter the name to be used in git config: John Doe
     Please enter the email address to be used in git config: johndoe@company.com
+    Please enter the signing key to be used in git config: ABCD1234
 
     $ git-context create_profile
     Please enter profile name: fun
     Please enter the name to be used in git config: Johnny
     Please enter the email address to be used in git config: johnny@wut.lol
+    Please enter the signing key to be used in git config: ZYXV0987
 ```
 
 Finally, create contexts to use a specified profile in a directory.
@@ -62,12 +64,16 @@ Now you can commit as different users easily.
     John Doe
     $ git config user.email
     johndoe@company.com
+    $ git config user.signingKey
+    ABCD1234
     
     $ cd /Users/john/fun/lol/wut
     $ git config user.name
     Johnny
     $ git config user.email
     johnny@wut.lol
+    $ git config user.signingKey
+    ZYXV0987
 ```
 
 **Tip:** You could also use `git context`. `git` recognizes `git-context` as a custom command. 

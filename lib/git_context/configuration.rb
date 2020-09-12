@@ -26,6 +26,7 @@ module GitContext
 
       `git config -f "#{profile_file}" --add user.name "#{profile.user.name}"`
       `git config -f "#{profile_file}" --add user.email "#{profile.user.email}"`
+      `git config -f "#{profile_file}" --add user.signingKey "#{profile.user.signing_key}"`
     end
 
     def list_profile_names

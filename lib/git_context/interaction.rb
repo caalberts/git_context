@@ -29,6 +29,10 @@ module GitContext
       @prompt.ask('Please enter the email address to be used in git config:')
     end
 
+    def prompt_user_signing_key
+      @prompt.ask('Please enter the signing key to be used in git config:')
+    end
+
     def info(message)
       puts @pastel.green(message)
     end

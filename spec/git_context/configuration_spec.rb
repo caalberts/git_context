@@ -5,7 +5,7 @@ require 'tmpdir'
 
 RSpec.describe GitContext::Configuration do
   let(:home) { Dir.mktmpdir }
-  let(:user) { GitContext::User.new('John Doe', 'john@email.com') }
+  let(:user) { GitContext::User.new('John Doe', 'john@email.com', 'ABCD1234') }
   let(:profile) { GitContext::Profile.new('test_profile', user) }
 
   subject { described_class.new(home) }
@@ -110,6 +110,14 @@ RSpec.describe GitContext::Configuration do
       content = File.read("#{home}/.gitcontext/profiles/test_profile")
       expect(content).to include('[user]')
       expect(content).to include('email = john@email.com')
+    end
+
+    it 'stores user.signingKey' do
+      subject.add_profile(profile)
+
+      content = File.read("#{home}/.gitcontext/profiles/test_profile")
+      expect(content).to include('[user]')
+      expect(content).to include('signingKey = ABCD1234')
     end
   end
 

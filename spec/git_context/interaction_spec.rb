@@ -64,6 +64,17 @@ RSpec.describe GitContext::Interaction do
     end
   end
 
+  describe '#prompt_user_signing_key' do
+    it 'asks user for signing key' do
+      expect(prompt).to receive(:ask)
+        .with('Please enter the signing key to be used in git config:')
+        .and_return('ABCD1234')
+
+      input = subject.prompt_user_signing_key
+      expect(input).to eq('ABCD1234')
+    end
+  end
+
   describe '#info' do
     it 'prints message' do
       message = 'success'

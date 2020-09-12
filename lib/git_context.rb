@@ -11,5 +11,5 @@ module GitContext
 
   Context = Struct.new(:work_dir, :profile_name)
   Profile = Struct.new(:profile_name, :user)
-  User = Struct.new(:name, :email)
+  User = Struct.new(:name, :email, :signing_key)
 end
