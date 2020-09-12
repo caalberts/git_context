@@ -6,7 +6,8 @@ module GitContext
       help: 'Help',
       setup: 'Setup',
       create_profile: 'CreateProfile',
-      create_context: 'CreateContext'
+      create_context: 'CreateContext',
+      list_profile: 'ListProfile'
     }.freeze
 
     def initialize(configuration)

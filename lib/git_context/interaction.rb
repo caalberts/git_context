@@ -28,6 +28,10 @@ module GitContext
       end
     end
 
+    def show(message)
+      @prompt.say(message)
+    end
+
     def info(message)
       @prompt.ok(message)
     end

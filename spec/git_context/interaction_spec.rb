@@ -61,8 +61,17 @@ RSpec.describe GitContext::Interaction do
     end
   end
 
-  describe '#info' do
+  describe '#show' do
     it 'prints message' do
+      message = "hello\nworld"
+      expect(prompt).to receive(:say).with(message)
+
+      subject.show(message)
+    end
+  end
+
+  describe '#info' do
+    it 'prints formatted success message' do
       message = 'success'
       expect(prompt).to receive(:ok).with(message)
 
