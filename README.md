@@ -10,6 +10,7 @@ No more committing with the wrong email in a new repository. With `git-context` 
 Currently, the supported config values are:
 - `user.name`
 - `user.email`
+- `user.signingKey`
 
 `git-context` uses git config [conditional includes](https://git-scm.com/docs/git-config#_conditional_includes) under the hood.
 
