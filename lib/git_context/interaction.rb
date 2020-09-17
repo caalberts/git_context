@@ -23,7 +23,7 @@ module GitContext
     def prompt_user_info
       @prompt.collect do
         key(:name).ask('Please enter the name to be used in git config:')
-        key(:email).ask('Please enter the name to be used in git config:')
+        key(:email).ask('Please enter the email address to be used in git config:')
         key(:signing_key).ask('Please enter the signing key to be used in git config:')
       end
     end
