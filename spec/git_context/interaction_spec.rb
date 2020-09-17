@@ -61,6 +61,15 @@ RSpec.describe GitContext::Interaction do
     end
   end
 
+  describe '#prompt_delete_profile' do
+    it 'asks user to delete a saved profile' do
+      simulate_prompt_keydown(2)
+
+      input = subject.prompt_delete_profile(%w[personal work others])
+      expect(input).to eq('others')
+    end
+  end
+
   describe '#show' do
     it 'prints message' do
       message = "hello\nworld"

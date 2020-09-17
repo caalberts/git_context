@@ -28,6 +28,10 @@ module GitContext
       end
     end
 
+    def prompt_delete_profile(saved_profiles)
+      @prompt.select('Please select profile to be deleted:', saved_profiles, cycle: true)
+    end
+
     def show(message)
       @prompt.say(message)
     end

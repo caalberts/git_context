@@ -33,8 +33,8 @@ module GitContext
       Dir.entries(profiles_dir) - %w[. ..]
     end
 
-    def delete_profile(profile)
-      profile_file = profile_filepath(profile.profile_name)
+    def delete_profile(profile_name)
+      profile_file = profile_filepath(profile_name)
       delete_file(profile_file)
     end
 

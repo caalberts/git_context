@@ -7,6 +7,7 @@ module GitContext
       setup: 'Setup',
       create_profile: 'CreateProfile',
       create_context: 'CreateContext',
+      delete_profile: 'DeleteProfile',
       list_profile: 'ListProfile'
     }.freeze
 

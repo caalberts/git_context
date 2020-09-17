@@ -145,9 +145,9 @@ RSpec.describe GitContext::Configuration do
     end
 
     it 'deletes a saved profile config' do
-      subject.delete_profile(profile)
+      subject.delete_profile(profile.profile_name)
 
-      expect(FileTest.exist?("#{home}/.gitcontext/profiles/test_profile")).to be(false)
+      expect(FileTest.exist?("#{home}/.gitcontext/profiles/#{profile.profile_name}")).to be(false)
     end
   end
 
