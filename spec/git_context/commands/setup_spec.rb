@@ -11,6 +11,7 @@ RSpec.describe GitContext::Commands::Setup do
   describe '#call' do
     before do
       allow(configuration).to receive(:setup)
+      allow(configuration).to receive(:home_dir).and_return('/home')
       allow(interaction).to receive(:info)
     end
 
@@ -21,6 +22,7 @@ RSpec.describe GitContext::Commands::Setup do
     end
 
     it 'informs user that git_context has been set up' do
+      expect(configuration).to receive(:home_dir)
       expect(interaction).to receive(:info).with(/git_context has been set up./)
 
       subject.call

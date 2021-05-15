@@ -131,10 +131,10 @@ RSpec.describe GitContext::Configuration do
       subject.add_profile(profile_2)
     end
 
-    it 'lists all stored profiles' do
+    it 'lists all stored profiles sorted alphabetically' do
       stored_profile_names = subject.list_profile_names
 
-      expect(stored_profile_names).to contain_exactly('work', 'personal')
+      expect(stored_profile_names).to eq(%w[personal work])
     end
   end
 

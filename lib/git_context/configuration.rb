@@ -9,6 +9,8 @@ module GitContext
     PROFILES_DIR = 'profiles'
     CONTEXTS_FILENAME = 'contexts'
 
+    attr_reader :home_dir
+
     def initialize(home_dir)
       @home_dir = home_dir
     end
@@ -30,7 +32,7 @@ module GitContext
     end
 
     def list_profile_names
-      Dir.entries(profiles_dir) - %w[. ..]
+      (Dir.entries(profiles_dir) - %w[. ..]).sort
     end
 
     def delete_profile(profile_name)

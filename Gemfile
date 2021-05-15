@@ -11,6 +11,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'aruba', '~> 1.1.0'
   gem 'rake', '~> 12.0'
   gem 'rspec', '~> 3.0'
   gem 'rspec_junit_formatter'
