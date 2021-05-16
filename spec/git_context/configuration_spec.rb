@@ -3,6 +3,47 @@
 require 'spec_helper'
 require 'tmpdir'
 
+RSpec.describe GitContext::ConfigData do
+  let(:home) { Dir.mktmpdir }
+  let(:gitcontext_dir) { File.join(home, '.gitcontext') }
+
+  before do
+    Dir.mkdir(gitcontext_dir)
+  end
+
+  describe '#serialize' do
+    subject { config.serialize }
+
+    let(:config) { described_class.new(home) }
+
+    let(:user) { GitContext::User.new('John Doe', 'john@email.com', 'ABCD1234') }
+    let(:profile) { GitContext::Profile.new('test_profile', user) }
+    let(:context) { GitContext::Context.new('~/work', 'test_profile') }
+
+    before do
+      config.profiles << profile
+      config.contexts << context
+    end
+
+    it 'serializes profiles into hash' do
+      expect(subject['profiles']).to contain_exactly(
+        {
+          'profile_name' => 'test_profile',
+          'name' => 'John Doe',
+          'email' => 'john@email.com',
+          'signing_key' => 'ABCD1234'
+        }
+      )
+      expect(subject['contexts']).to contain_exactly(
+        {
+          'profile_name' => 'test_profile',
+          'work_dir' => '~/work'
+        }
+      )
+    end
+  end
+end
+
 RSpec.describe GitContext::Configuration do
   let(:home) { Dir.mktmpdir }
   let(:user) { GitContext::User.new('John Doe', 'john@email.com', 'ABCD1234') }
@@ -15,22 +56,28 @@ RSpec.describe GitContext::Configuration do
   end
 
   describe '#setup' do
-    let(:gitconfig_path) { Pathname.new(home).join('.gitconfig') }
+    let(:gitconfig_path) { File.join(home, '.gitconfig') }
 
     before do
       FileUtils.touch(gitconfig_path)
     end
 
+    it 'creates config file' do
+      subject.setup
+
+      expect(FileTest.exists?(File.join(home, '.gitcontext/config.yml'))).to be_truthy
+    end
+
     it 'creates contexts file' do
       subject.setup
 
-      expect(FileTest.exists?(Pathname.new(home).join('.gitcontext/contexts'))).to be_truthy
+      expect(FileTest.exists?(File.join(home, '.gitcontext/contexts'))).to be_truthy
     end
 
     it 'creates profiles directory' do
       subject.setup
 
-      expect(FileTest.exists?(Pathname.new(home).join('.gitcontext/profiles'))).to be_truthy
+      expect(FileTest.exists?(File.join(home, '.gitcontext/profiles'))).to be_truthy
     end
 
     it 'includes contexts file into ~/.gitconfig' do
@@ -42,7 +89,7 @@ RSpec.describe GitContext::Configuration do
 
     context 'with existing .gitcontext directory' do
       before do
-        FileUtils.mkdir(Pathname.new(home).join('.gitcontext'))
+        FileUtils.mkdir(File.join(home, '.gitcontext'))
       end
 
       it 'does not raise error' do
@@ -52,8 +99,8 @@ RSpec.describe GitContext::Configuration do
 
     context 'with existing contexts file' do
       before do
-        FileUtils.mkdir(Pathname.new(home).join('.gitcontext'))
-        FileUtils.touch(Pathname.new(home).join('.gitcontext/contexts'))
+        FileUtils.mkdir(File.join(home, '.gitcontext'))
+        FileUtils.touch(File.join(home, '.gitcontext/contexts'))
       end
 
       it 'does not raise error' do
@@ -63,7 +110,7 @@ RSpec.describe GitContext::Configuration do
 
     context 'with existing profiles directory' do
       before do
-        FileUtils.mkdir_p(Pathname.new(home).join('.gitcontext/profiles'))
+        FileUtils.mkdir_p(File.join(home, '.gitcontext/profiles'))
       end
 
       it 'does not raise error' do
@@ -88,6 +135,24 @@ RSpec.describe GitContext::Configuration do
   describe '#add_profile' do
     before do
       subject.setup
+    end
+
+    it 'adds profile to config data' do
+      subject.add_profile(profile)
+
+      expect(subject.config_data.profiles).to contain_exactly(profile)
+    end
+
+    it 'stores profile in config.yml' do
+      subject.add_profile(profile)
+
+      aggregate_failures do
+        expect(yaml_content['profiles'].length).to eq(1)
+        expect(yaml_content['profiles'].first['profile_name']).to eq(profile.profile_name)
+        expect(yaml_content['profiles'].first['name']).to eq(profile.user.name)
+        expect(yaml_content['profiles'].first['email']).to eq(profile.user.email)
+        expect(yaml_content['profiles'].first['signing_key']).to eq(profile.user.signing_key)
+      end
     end
 
     it 'creates a profile config' do
@@ -144,6 +209,18 @@ RSpec.describe GitContext::Configuration do
       subject.add_profile(profile)
     end
 
+    it 'deletes profile from config data' do
+      subject.delete_profile(profile.profile_name)
+
+      expect(subject.config_data.profiles).not_to include(profile)
+    end
+
+    it 'stores profile in config.yml' do
+      subject.delete_profile(profile.profile_name)
+
+      expect(yaml_content['profiles'].length).to eq(0)
+    end
+
     it 'deletes a saved profile config' do
       subject.delete_profile(profile.profile_name)
 
@@ -158,11 +235,31 @@ RSpec.describe GitContext::Configuration do
       subject.setup
     end
 
+    it 'adds context to config data' do
+      subject.add_context(context)
+
+      expect(subject.config_data.contexts).to contain_exactly(context)
+    end
+
+    it 'stores profile in config.yml' do
+      subject.add_context(context)
+
+      aggregate_failures do
+        expect(yaml_content['contexts'].length).to eq(1)
+        expect(yaml_content['contexts'].first['profile_name']).to eq(context.profile_name)
+        expect(yaml_content['contexts'].first['work_dir']).to eq(context.work_dir)
+      end
+    end
+
     it 'adds context to git config' do
       subject.add_context(context)
 
       content = File.read("#{home}/.gitcontext/contexts")
       expect(content).to include(%([includeIf "gitdir:/my/work/dir/"]\n\tpath = #{home}/.gitcontext/profiles/test_profile))
     end
+  end
+
+  def yaml_content
+    @yaml_content ||= YAML.load_file(File.join(home, '.gitcontext/config.yml'))
   end
 end

@@ -5,7 +5,7 @@ module GitContext
     class Setup < Base
       def call
         @configuration.setup
-        @interaction.info("git_context has been set up in #{@configuration.home_dir}")
+        @interaction.info("git_context has been set up in #{@configuration.home}")
       end
     end
   end

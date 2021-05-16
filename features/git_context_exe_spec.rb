@@ -38,7 +38,7 @@ RSpec.describe 'git-context exe', type: :aruba do
 
   let(:work_context) do
     {
-      work_dir: '~/work',
+      work_dir: 'work',
       profile_name: work_profile[:profile_name]
     }
   end
@@ -50,34 +50,49 @@ RSpec.describe 'git-context exe', type: :aruba do
   it 'git-context setup, create profiles and context, delete profile', :aggregate_failures do
     setup
 
-    expect(last_command_started).to be_successfully_executed
-
-    expect(exist?(gitcontext_profiles)).to be true
-    expect(exist?(context_file)).to be true
-
-    expect(gitconfig).to have_file_content(base_gitconfig + gitconfig_hook)
+    aggregate_failures do
+      expect(last_command_started).to be_successfully_executed
+      expect(exist?(config_file)).to be true
+      expect(exist?(gitcontext_profiles)).to be true
+      expect(exist?(context_file)).to be true
+      expect(gitconfig).to have_file_content(base_gitconfig + gitconfig_hook)
+    end
 
     create_profile(work_profile)
 
-    expect(last_command_started).to be_successfully_executed
-    expect(profile_file(work_profile)).to have_file_content(profile_entry(work_profile))
+    aggregate_failures do
+      expect(last_command_started).to be_successfully_executed
+      expect(config_file).to have_file_content(/#{yml_profile_entry(work_profile)}/)
+      expect(profile_file(work_profile)).to have_file_content(git_profile_entry(work_profile))
+    end
 
     create_profile(home_profile)
 
-    expect(last_command_started).to be_successfully_executed
-    expect(profile_file(home_profile)).to have_file_content(profile_entry(home_profile))
+    aggregate_failures do
+      expect(last_command_started).to be_successfully_executed
+      expect(config_file).to have_file_content(/#{yml_profile_entry(work_profile)}/)
+      expect(config_file).to have_file_content(/#{yml_profile_entry(home_profile)}/)
+      expect(profile_file(work_profile)).to have_file_content(git_profile_entry(work_profile))
+      expect(profile_file(home_profile)).to have_file_content(git_profile_entry(home_profile))
+    end
 
     create_context(work_context, work_profile)
 
-    expect(last_command_started).to be_successfully_executed
-    expect(last_command_started).to have_output(/#{home_profile[:profile_name]}\s+#{work_profile[:profile_name]}/)
-
-    expect(context_file).to have_file_content(context_entry(work_context, work_profile))
+    aggregate_failures do
+      expect(last_command_started).to be_successfully_executed
+      expect(last_command_started).to have_output(/#{home_profile[:profile_name]}\s+#{work_profile[:profile_name]}/)
+      expect(config_file).to have_file_content(/#{yml_context_entry(work_context).strip}/)
+      expect(context_file).to have_file_content(include_context_entry(work_context, work_profile))
+    end
 
     delete_profile(home_profile)
 
-    expect(last_command_started).to be_successfully_executed
-    expect(exist?(profile_file(home_profile))).to be(false)
+    aggregate_failures do
+      expect(last_command_started).to be_successfully_executed
+      expect(config_file).to have_file_content(/#{yml_profile_entry(work_profile)}/)
+      expect(config_file).not_to have_file_content(/#{yml_profile_entry(home_profile)}/)
+      expect(exist?(profile_file(home_profile))).to be(false)
+    end
   end
 
   def setup
@@ -122,7 +137,23 @@ RSpec.describe 'git-context exe', type: :aruba do
     GITCONFIG_HOOK
   end
 
-  def profile_entry(profile)
+  def yml_profile_entry(profile)
+    <<~PROFILE_ENTRY
+      - profile_name: #{profile[:profile_name]}
+        name: #{profile[:name]}
+        email: #{profile[:email]}
+        signing_key: #{profile[:signing_key]}
+    PROFILE_ENTRY
+  end
+
+  def yml_context_entry(context)
+    <<~CONTEXT_ENTRY
+      - work_dir: #{context[:work_dir]}
+        profile_name: #{context[:profile_name]}
+    CONTEXT_ENTRY
+  end
+
+  def git_profile_entry(profile)
     <<~USER_ENTRY
       [user]
       \tname = #{profile[:name]}
@@ -131,7 +162,7 @@ RSpec.describe 'git-context exe', type: :aruba do
     USER_ENTRY
   end
 
-  def context_entry(context, profile)
+  def include_context_entry(context, profile)
     <<~CONTEXT_ENTRY
       [includeIf "gitdir:#{context[:work_dir]}/"]
       \tpath = #{full_path_to(profile_file(profile))}
@@ -144,6 +175,10 @@ RSpec.describe 'git-context exe', type: :aruba do
 
   def profile_file(profile)
     ".gitcontext/profiles/#{profile[:profile_name]}"
+  end
+
+  def config_file
+    '.gitcontext/config.yml'
   end
 
   def context_file
