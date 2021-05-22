@@ -241,6 +241,18 @@ RSpec.describe GitContext::Configuration do
       expect(subject.config_data.contexts).to contain_exactly(context)
     end
 
+    it 'adds context to config data in nested order' do
+      context1 = GitContext::Context.new('/my/home/dir/a', 'home_profile')
+      context2 = GitContext::Context.new('/my/home/dir', 'home_profile')
+      context3 = GitContext::Context.new('/my/home/dir/b', 'home_profile')
+
+      subject.add_context(context1)
+      subject.add_context(context2)
+      subject.add_context(context3)
+
+      expect(subject.config_data.contexts).to eq([context2, context1, context3])
+    end
+
     it 'stores profile in config.yml' do
       subject.add_context(context)
 

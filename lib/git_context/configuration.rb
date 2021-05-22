@@ -54,6 +54,8 @@ module GitContext
 
     def add_context(context)
       config_data.contexts << context
+      config_data.contexts.sort_by!(&:work_dir)
+
       save_into_storage
     end
 
