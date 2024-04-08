@@ -21,7 +21,7 @@ RSpec.describe GitContext::Storage::YML do
     it 'creates config file' do
       subject.setup
 
-      expect(FileTest.exists?(File.join(home, '.gitcontext/config.yml'))).to be_truthy
+      expect(FileTest.exist?(File.join(home, '.gitcontext/config.yml'))).to be_truthy
     end
   end
 

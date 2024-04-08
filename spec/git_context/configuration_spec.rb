@@ -65,19 +65,19 @@ RSpec.describe GitContext::Configuration do
     it 'creates config file' do
       subject.setup
 
-      expect(FileTest.exists?(File.join(home, '.gitcontext/config.yml'))).to be_truthy
+      expect(FileTest.exist?(File.join(home, '.gitcontext/config.yml'))).to be_truthy
     end
 
     it 'creates contexts file' do
       subject.setup
 
-      expect(FileTest.exists?(File.join(home, '.gitcontext/contexts'))).to be_truthy
+      expect(FileTest.exist?(File.join(home, '.gitcontext/contexts'))).to be_truthy
     end
 
     it 'creates profiles directory' do
       subject.setup
 
-      expect(FileTest.exists?(File.join(home, '.gitcontext/profiles'))).to be_truthy
+      expect(FileTest.exist?(File.join(home, '.gitcontext/profiles'))).to be_truthy
     end
 
     it 'includes contexts file into ~/.gitconfig' do

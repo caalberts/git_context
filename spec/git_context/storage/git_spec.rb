@@ -18,13 +18,13 @@ RSpec.describe GitContext::Storage::Git do
     it 'creates contexts file' do
       subject.setup
 
-      expect(FileTest.exists?(File.join(home, '.gitcontext/contexts'))).to be_truthy
+      expect(FileTest.exist?(File.join(home, '.gitcontext/contexts'))).to be_truthy
     end
 
     it 'creates profiles directory' do
       subject.setup
 
-      expect(FileTest.exists?(File.join(home, '.gitcontext/profiles'))).to be_truthy
+      expect(FileTest.exist?(File.join(home, '.gitcontext/profiles'))).to be_truthy
     end
 
     it 'includes contexts file into ~/.gitconfig' do

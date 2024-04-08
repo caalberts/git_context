@@ -70,7 +70,7 @@ module GitContext
     end
 
     def create_base_dir
-      FileUtils.mkdir(git_context_dir) unless FileTest.exists?(git_context_dir)
+      FileUtils.mkdir(git_context_dir) unless FileTest.exist?(git_context_dir)
     end
 
     def git_context_dir

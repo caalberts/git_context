@@ -109,7 +109,7 @@ module GitContext
       end
 
       def create_dir(dir)
-        FileUtils.mkdir(dir) unless FileTest.exists?(dir)
+        FileUtils.mkdir(dir) unless FileTest.exist?(dir)
       end
     end
   end
